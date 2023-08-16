@@ -13,15 +13,18 @@ public class MemberSaveControllerV4 implements ControllerV4 {
     private MemberRepository memberRepository = MemberRepository.getInstance();
 
     @Override
-    public String process(Map<String, String> paramMap,Map<String,Object> model) {
-        String username = paramMap.get("username");
-        int age = Integer.parseInt(paramMap.get("age"));
+    public String process(Map<String, String> requestModel,Map<String,Object> responseModel) {
+
+        // [ 비즈니스 로직 ]
+        String username = requestModel.get("username"); // 요청 데이터 가져오기
+        int age = Integer.parseInt(requestModel.get("age"));
 
         Member member = new Member(username,age);
         memberRepository.save(member);
 
-        model.put("member",member);
-        return "save-result";
+        // [ 응답데이터 설정 ]
+        responseModel.put("member",member); // 응답 데이터 설정
+        return "save-result"; // View 리졸버에 전달할 View name 반환
 
     }
 }

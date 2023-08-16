@@ -13,7 +13,6 @@ public class ResponseViewController {
     public ModelAndView responseViewV1(){
         ModelAndView mav = new ModelAndView("response/hello")
                 .addObject("data","hello");
-
         return mav;
     }
 

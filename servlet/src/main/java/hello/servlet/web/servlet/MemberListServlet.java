@@ -20,10 +20,15 @@ public class MemberListServlet extends HttpServlet {
     MemberRepository memberRepository = MemberRepository.getInstance();
     @Override
     protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+        // 비즈니스 로직
         List<Member> members = memberRepository.findAll();
+
+        // [ Header 영역 ]
         response.setContentType("text/html");
         response.setCharacterEncoding("utf-8");
 
+        // [ Body 영역 ]
         PrintWriter w = response.getWriter();
         w.write("<html>");
         w.write("<head>");
@@ -40,7 +45,7 @@ public class MemberListServlet extends HttpServlet {
         w.write("    </thead>");
         w.write("    <tbody>");
 
-        //동적으로 생성
+        //동적으로 테이블 생성
         for (Member member : members) {
             w.write("    <tr>");
             w.write("        <td>" + member.getId() + "</td>");

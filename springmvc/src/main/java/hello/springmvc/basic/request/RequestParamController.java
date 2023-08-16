@@ -78,10 +78,13 @@ public class RequestParamController {
     @ResponseBody
     @RequestMapping("/request-attribute-v0")
     public String modelAttributeV0(@RequestParam String username,@RequestParam int age){
-        HelloData helloData = new HelloData(username,age);
 
-        log.info("username= {}, age={}", helloData.getUsername(),helloData.getAge());
-        log.info("helloData = {}",helloData); //@Data가 toString을 예쁘게 만들어준다.
+        HelloData helloData = new HelloData();
+        helloData.setUsername(username);
+        helloData.setAge(age);
+
+        // [ 비즈니스 로직... ]
+
         return "OK";
     }
 

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
@@ -52,6 +53,7 @@ public class RequestBodyStringController {
         return new ResponseEntity<String>("OK",HttpStatus.CREATED); //응답에도 사용 가능
     }
 
+    @ResponseBody
     @PostMapping("/request-body-string-v4") // HttpEntity의 RequestBody를 읽어 바로 파라미터로 넘겨준다.
     public String requestBodyStringV4(@RequestBody String messageBody) throws IOException {
         log.info("message = {}",messageBody);

@@ -52,25 +52,31 @@ public class FrontControllerServletV5 extends HttpServlet {
 
     @Override
     protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        System.out.println("FrontControllerServletV3.service");
 
+        // [ 요청과 매핑되는 Controller 구현체(handler) 가져오기 ]
         Object handler = getHandler(request);
 
-        //404 ERROR 발생
-        if(handler == null){
-            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            return;
-        }
+        // 요청과 매핑되는 핸들러가 없을 시, 404에러
+        if (is404(response, handler)) return;
 
+        // [ 핸들러를 지원하는 핸들러어댑터 탐색하기 ]
         MyHandlerAdapter adapter = getHandlerAdapter(handler);
+
+        // [ 어댑터에게 핸들러의 비즈니스 로직 수행 요청하기 ]
         ModelView mv = adapter.handle(request, response, handler);
 
-        //MyView 생성
+        // [ 비즈니스로직 수행 결과 VIEW 영역에 전달하기
         String viewName = mv.getViewName();
         MyView view = viewResolver(viewName);
-
-        //MyView rendering 하기
         view.render(mv.getModel(),request,response);
+    }
+
+    private boolean is404(HttpServletResponse response, Object handler) {
+        if(handler == null){
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            return true;
+        }
+        return false;
     }
 
     private MyHandlerAdapter getHandlerAdapter(Object handler) {

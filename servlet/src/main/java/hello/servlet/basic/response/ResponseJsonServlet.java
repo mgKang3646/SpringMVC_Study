@@ -18,15 +18,18 @@ public class ResponseJsonServlet extends HttpServlet {
     private ObjectMapper objectMapper = new ObjectMapper();
     @Override
     protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        //ContentType : application/json
+
+        //[ Header 영역 데이터 설정 ]
         response.setContentType("application/json");
         response.setCharacterEncoding("utf-8");
 
+        // 객체에 데이터 세팅하기
         HelloData helloData = new HelloData();
         helloData.setUsername("KIM");
         helloData.setAge(20);
 
-        String result = objectMapper.writeValueAsString(helloData);
+        //[ Body 영역 데이터 설정 ]
+        String result = objectMapper.writeValueAsString(helloData); // JSON 형식의 문자열로 변환하기
         response.getWriter().write(result);
     }
 }

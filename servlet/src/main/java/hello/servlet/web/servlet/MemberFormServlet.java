@@ -14,8 +14,6 @@ import java.io.PrintWriter;
 @WebServlet(name = "memberFormServlet",urlPatterns = "/servlet/members/new-form")
 public class MemberFormServlet extends HttpServlet {
 
-    MemberRepository memberRepository = MemberRepository.getInstance();
-
     @Override
     protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html");
@@ -36,6 +34,5 @@ public class MemberFormServlet extends HttpServlet {
                 " <button type=\"submit\">전송</button>\n" + "</form>\n" +
                 "</body>\n" +
                 "</html>\n");
-
     }
 }

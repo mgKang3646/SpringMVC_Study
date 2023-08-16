@@ -16,17 +16,16 @@ public class MemberSaveControllerV2 implements ControllerV2 {
 
     @Override
     public MyView process(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // [ 비즈니스 로직 ]
         String username = request.getParameter("username");
         int age =Integer.parseInt(request.getParameter("age")) ;
 
         Member member =new Member(username,age);
         memberRepository.save(member);
 
-        //Model에 데이터를 보관해야 한다.
-        request.setAttribute("member",member); //request 내부저장소에 보관
-
-        return new MyView("/WEB-INF/views/save-result.jsp");
-
+        // [ 결과 반환하기 ]
+        request.setAttribute("member",member); //request 내부저장소에 처리 결과 데이터 저장하기
+        return new MyView("/WEB-INF/views/save-result.jsp"); // VIEW 객체 반환
     }
 
 }

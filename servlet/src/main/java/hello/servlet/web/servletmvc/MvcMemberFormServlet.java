@@ -17,6 +17,4 @@ public class MvcMemberFormServlet extends HttpServlet {
         RequestDispatcher dispatcher = request.getRequestDispatcher(viewPath);
         dispatcher.forward(request,response); // 다른 서블릿이나 JSP로 이동 ( 내부적인 호출, redirect x )
     }
-
-
 }

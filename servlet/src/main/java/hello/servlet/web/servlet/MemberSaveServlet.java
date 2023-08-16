@@ -19,16 +19,20 @@ public class MemberSaveServlet extends HttpServlet {
 
     @Override
     protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        System.out.println("MemberSaveServlet.service");
+
+        // [ Request 요청 데이터 가져오기 ]
         String username = request.getParameter("username");
         int age =Integer.parseInt(request.getParameter("age")) ;
 
+        // [ 비즈니스 로직 ]
         Member member =new Member(username,age);
         memberRepository.save(member);
 
+        // [ 응답 Header 영역 데이터 설정 ]
         response.setContentType("text/html");
         response.setCharacterEncoding("utf-8");
 
+        // [ 응답 Body 영역 데이터 설정 ]
         PrintWriter w = response.getWriter();
         w.write("<html>\n" +
                 "<head>\n" +
