@@ -54,29 +54,26 @@ public class ValidationItemControllerV2 {
         return "validation/v2/addForm";
     }
 
-    //@PostMapping("/add") // BindingResult는 @ModelAttribute 뒤에 와야함
-    public String addItemV2(@ModelAttribute Item item, BindingResult bindingResult, RedirectAttributes redirectAttributes, Model model) {
+    @PostMapping("/add") // BindingResult는 @ModelAttribute 뒤에 와야함
+    public String addItemV2(@ModelAttribute Item item, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
 
 
-
-        // 검증로직
+        // 상품명이 공백인 경우
         if(!StringUtils.hasText(item.getItemName())){
-            bindingResult.addError(new FieldError("item","itemName","상품이름은 필 수 입니다."));
+            bindingResult.addError(new FieldError("item","itemName","상품이름은 필수 입니다."));
         }
 
-        //price가 숫자가 아닌 타입으로 들어오는 경우는 이미 BindingResult에 들어가 있다.
+        // 가격이 범위 밖인 경우
         if(item.getPrice() == null || item.getPrice() < 1000 || item.getPrice() > 1000000){
             bindingResult.addError(new FieldError("item","price","가격은 1,000 ~ 1,000,000 까지 허용합니다. "));
-
-
         }
 
+        // 수량이 범위 밖인 경우
         if(item.getQuantity() == null || item.getQuantity() >= 9999){
             bindingResult.addError(new FieldError("item","quantity","수량은 최대 9,999까지 혀용합니다. "));
-
         }
 
-        // 틀정 필드가 아닌 복합 룰 검증
+        // 두 개 항목 이상의 복합 룰 검증
         if(item.getPrice() != null && item.getQuantity() != null){
             int resultPrice = item.getPrice()*item.getQuantity();
             if(resultPrice < 10000){
@@ -90,8 +87,13 @@ public class ValidationItemControllerV2 {
             return "validation/v2/addForm";
         }
 
-        // 검증 성공 로직
+        // 검증에 실패하면 다시 입력폼으로 이동
+        if(bindingResult.hasErrors()){
+            log.info("errors={}",bindingResult); // model에 안 담아도 됨. 자동으로 넘어감
+            return "validation/v2/addForm";
+        }
 
+        // 검증 성공 로직
         Item savedItem = itemRepository.save(item);
         redirectAttributes.addAttribute("itemId", savedItem.getId());
         redirectAttributes.addAttribute("status", true);
@@ -216,7 +218,7 @@ public class ValidationItemControllerV2 {
         return "redirect:/validation/v2/items/{itemId}";
     }
 
-    @PostMapping("/add") // @Validated 검증기를 실행하라는 어노테이션
+    //@PostMapping("/add") // @Validated 검증기를 실행하라는 어노테이션
     public String addItemV6(@Validated @ModelAttribute Item item, BindingResult bindingResult, RedirectAttributes redirectAttributes, Model model) {
 
         // 검증에 실패하면 다시 입력폼으로 이동
